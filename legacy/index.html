@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Creative Developer & Designer Portfolio - Showcasing innovative digital experiences">
+    <meta name="keywords" content="portfolio, developer, designer, creative, web development">
+    <title>Abishek Pechiappan | Cyber-Student</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Terminal-Style Scroll Percentage -->
+    <div class="scroll-percentage" id="scrollPercentage">
+        <span class="percentage-bracket">[</span>
+        <span class="percentage-label">SCROLL:</span>
+        <span class="percentage-value" id="percentValue">0</span>
+        <span class="percentage-unit">%</span>
+        <span class="percentage-bracket">]</span>
+    </div>
+
+    <!-- Security Boot Sequence Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loader-container">
+            <div class="loader-content">
+                <div class="hex-loader">
+                    <div class="hex-ring"></div>
+                    <div class="hex-ring"></div>
+                    <div class="hex-ring"></div>
+                </div>
+                <div class="boot-sequence" id="bootSequence">
+                    <div class="boot-line">> SYSTEM BOOT INITIATED...</div>
+                    <div class="boot-line">> LOADING SECURITY MODULES...</div>
+                    <div class="boot-line">> ESTABLISHING SECURE CONNECTION...</div>
+                    <div class="boot-line">> VERIFYING CREDENTIALS...</div>
+                    <div class="boot-line">> INITIALIZING FIREWALL...</div>
+                    <div class="boot-line">> ACCESS GRANTED <span class="boot-status">✓</span></div>
+                </div>
+                <div class="loading-bar">
+                    <div class="loading-bar-fill" id="loadingBarFill"></div>
+                    <div class="loading-percent" id="loadingPercent">0%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Aurora Background -->
+    <div class="aurora-bg">
+        <div class="aurora-gradient aurora-1"></div>
+        <div class="aurora-gradient aurora-2"></div>
+        <div class="aurora-gradient aurora-3"></div>
+    </div>
+
+    <!-- Cyber Background Layers -->
+    <div class="cyber-grid"></div>
+    <div class="binary-rain">
+        <div class="binary-stream" style="--stream-delay: 0s; --stream-duration: 20s;"></div>
+        <div class="binary-stream" style="--stream-delay: 2s; --stream-duration: 25s;"></div>
+        <div class="binary-stream" style="--stream-delay: 4s; --stream-duration: 18s;"></div>
+        <div class="binary-stream" style="--stream-delay: 6s; --stream-duration: 22s;"></div>
+        <div class="binary-stream" style="--stream-delay: 8s; --stream-duration: 24s;"></div>
+    </div>
+    <div class="hex-overlay">
+        <div class="hex-code">0x4A7F</div>
+        <div class="hex-code">0xB3E9</div>
+        <div class="hex-code">0x2C41</div>
+        <div class="hex-code">0xF8D2</div>
+    </div>
+    <canvas class="circuit-canvas" id="circuitCanvas"></canvas>
+
+    <!-- Terminal HUD Navigation -->
+    <nav class="floating-nav terminal-hud" id="navbar">
+        <div class="nav-pill">
+            <div class="terminal-prompt">root@security:~$</div>
+            <a href="#home" class="nav-link active" data-label="Home">
+                <span class="terminal-bracket">[</span>
+                <svg class="nav-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                    <polyline points="9 22 9 12 15 12 15 22" />
+                </svg>
+                <span class="label-stack">
+                    <span class="pill-label">HOME</span>
+                    <span class="pill-label-hover" aria-hidden="true">HOME</span>
+                </span>
+                <span class="terminal-bracket">]</span>
+                <span class="glitch-overlay" aria-hidden="true">HOME</span>
+            </a>
+            <a href="#about" class="nav-link" data-label="About">
+                <span class="terminal-bracket">[</span>
+                <svg class="nav-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                </svg>
+                <span class="label-stack">
+                    <span class="pill-label">ABOUT</span>
+                    <span class="pill-label-hover" aria-hidden="true">ABOUT</span>
+                </span>
+                <span class="terminal-bracket">]</span>
+                <span class="glitch-overlay" aria-hidden="true">ABOUT</span>
+            </a>
+            <a href="#projects" class="nav-link" data-label="Projects">
+                <span class="terminal-bracket">[</span>
+                <svg class="nav-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7" />
+                    <rect x="14" y="3" width="7" height="7" />
+                    <rect x="14" y="14" width="7" height="7" />
+                    <rect x="3" y="14" width="7" height="7" />
+                </svg>
+                <span class="label-stack">
+                    <span class="pill-label">PROJECTS</span>
+                    <span class="pill-label-hover" aria-hidden="true">PROJECTS</span>
+                </span>
+                <span class="terminal-bracket">]</span>
+                <span class="glitch-overlay" aria-hidden="true">PROJECTS</span>
+            </a>
+            <a href="#skills" class="nav-link" data-label="Skills">
+                <span class="terminal-bracket">[</span>
+                <svg class="nav-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                    <path d="M2 17l10 5 10-5M2 12l10 5 10-5" />
+                </svg>
+                <span class="label-stack">
+                    <span class="pill-label">SKILLS</span>
+                    <span class="pill-label-hover" aria-hidden="true">SKILLS</span>
+                </span>
+                <span class="terminal-bracket">]</span>
+                <span class="glitch-overlay" aria-hidden="true">SKILLS</span>
+            </a>
+            <a href="#contact" class="nav-link" data-label="Contact">
+                <span class="terminal-bracket">[</span>
+                <svg class="nav-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                    <polyline points="22,6 12,13 2,6" />
+                </svg>
+                <span class="label-stack">
+                    <span class="pill-label">CONTACT</span>
+                    <span class="pill-label-hover" aria-hidden="true">CONTACT</span>
+                </span>
+                <span class="terminal-bracket">]</span>
+                <span class="glitch-overlay" aria-hidden="true">CONTACT</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="terminal-prefix blur-reveal" style="--delay: 0s">
+                <span class="terminal-user">root@security</span><span class="terminal-separator">:</span><span
+                    class="terminal-path">~</span><span class="terminal-symbol">$</span>
+            </div>
+            <h1 class="hero-title">
+                <span class="title-line blur-reveal" style="--delay: 0.1s">Hello, I'm</span>
+                <span class="title-line gradient-text blur-reveal" style="--delay: 0.3s">
+                    <span class="decrypted-name" id="decryptedName">Abishek Pechiappan</span>
+                </span>
+            </h1>
+            <p class="hero-subtitle blur-reveal" style="--delay: 0.5s">
+                <span class="terminal-operator">>></span>
+                <span class="typing-text" id="typingRoles">Security Researcher</span>
+                <span class="typing-cursor">_</span>
+            </p>
+            <div class="hero-cta blur-reveal" style="--delay: 0.9s">
+                <a href="#projects" class="btn btn-primary btn-terminal magnetic">
+                    <span class="btn-prompt">$</span>
+                    <span>execute --view-work</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                </a>
+                <a href="#contact" class="btn btn-secondary btn-terminal magnetic">
+                    <span class="btn-prompt">$</span>
+                    <span>connect --secure</span>
+                </a>
+            </div>
+            <div class="hero-social blur-reveal" style="--delay: 1.1s">
+                <a href="https://github.com/Abishek-Pechiappan" target="_blank" rel="noopener noreferrer"
+                    class="social-link magnetic" aria-label="GitHub">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                    </svg>
+                </a>
+                <a href="https://www.linkedin.com/public-profile/settings?trk=d_flagship3_profile_self_view_public_profile"
+                    target="_blank" rel="noopener noreferrer" class="social-link magnetic" aria-label="LinkedIn">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">About Me</span>
+                <h2 class="section-title">Can I Turning Ideas Into <span class="gradient-text">Reality ?</span></h2>
+            </div>
+            <div class="about-grid">
+                <div class="about-image-wrapper">
+                    <div class="cyber-avatar-container" id="cyberAvatar">
+                        <div class="avatar-background-glow"></div>
+
+                        <!-- Data Streams -->
+                        <div class="data-streams">
+                            <div class="data-stream" style="--delay: 0s; --duration: 3s;"></div>
+                            <div class="data-stream" style="--delay: 1s; --duration: 4s;"></div>
+                            <div class="data-stream" style="--delay: 2s; --duration: 3.5s;"></div>
+                        </div>
+
+                        <!-- Main Avatar -->
+                        <div class="cyber-avatar">
+                            <!-- Hooded Figure SVG -->
+                            <svg class="avatar-figure" viewBox="0 0 200 200" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <!-- Hood -->
+                                <path d="M100 20 L60 80 L60 120 L100 140 L140 120 L140 80 Z" fill="url(#hoodGradient)"
+                                    stroke="var(--accent-primary)" stroke-width="2" />
+
+                                <!-- Face Shadow -->
+                                <ellipse cx="100" cy="90" rx="25" ry="35" fill="rgba(0,0,0,0.8)" />
+
+                                <!-- Glowing Eyes -->
+                                <circle cx="90" cy="85" r="4" fill="var(--accent-primary)" class="cyber-eye left-eye">
+                                    <animate attributeName="opacity" values="1;0.3;1" dur="3s"
+                                        repeatCount="indefinite" />
+                                </circle>
+                                <circle cx="110" cy="85" r="4" fill="var(--accent-primary)" class="cyber-eye right-eye">
+                                    <animate attributeName="opacity" values="1;0.3;1" dur="3s"
+                                        repeatCount="indefinite" />
+                                </circle>
+
+                                <!-- Eye Glow -->
+                                <circle cx="90" cy="85" r="8" fill="var(--accent-primary)" opacity="0.3"
+                                    class="eye-glow">
+                                    <animate attributeName="r" values="8;12;8" dur="2s" repeatCount="indefinite" />
+                                    <animate attributeName="opacity" values="0.3;0.6;0.3" dur="2s"
+                                        repeatCount="indefinite" />
+                                </circle>
+                                <circle cx="110" cy="85" r="8" fill="var(--accent-primary)" opacity="0.3"
+                                    class="eye-glow">
+                                    <animate attributeName="r" values="8;12;8" dur="2s" repeatCount="indefinite" />
+                                    <animate attributeName="opacity" values="0.3;0.6;0.3" dur="2s"
+                                        repeatCount="indefinite" />
+                                </circle>
+
+                                <!-- Face Mask -->
+                                <path d="M85 95 Q100 105 115 95" stroke="var(--accent-primary)" stroke-width="1.5"
+                                    fill="none" opacity="0.6" />
+
+                                <!-- Body/Shoulders -->
+                                <path d="M60 120 L50 160 L80 180 L100 175 L120 180 L150 160 L140 120"
+                                    fill="url(#bodyGradient)" stroke="var(--accent-primary)" stroke-width="1.5"
+                                    opacity="0.8" />
+
+                                <!-- Tech Details -->
+                                <circle cx="75" cy="140" r="3" fill="var(--accent-secondary)" opacity="0.8">
+                                    <animate attributeName="opacity" values="0.8;0.3;0.8" dur="1.5s"
+                                        repeatCount="indefinite" />
+                                </circle>
+                                <circle cx="125" cy="140" r="3" fill="var(--accent-secondary)" opacity="0.8">
+                                    <animate attributeName="opacity" values="0.3;0.8;0.3" dur="1.5s"
+                                        repeatCount="indefinite" />
+                                </circle>
+
+                                <!-- Gradients -->
+                                <defs>
+                                    <linearGradient id="hoodGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" style="stop-color:rgba(99,102,241,0.3);stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:rgba(6,0,16,0.9);stop-opacity:1" />
+                                    </linearGradient>
+                                    <linearGradient id="bodyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" style="stop-color:rgba(6,0,16,0.8);stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:rgba(99,102,241,0.2);stop-opacity:1" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+
+                            <!-- Scanning Line -->
+                            <div class="scan-line"></div>
+
+                            <!-- Hexagonal Border -->
+                            <div class="hex-border">
+                                <svg viewBox="0 0 200 200" class="hex-svg">
+                                    <polygon points="100,10 160,50 160,130 100,170 40,130 40,50" fill="none"
+                                        stroke="var(--accent-primary)" stroke-width="1.5" opacity="0.6" />
+                                    <polygon points="100,10 160,50 160,130 100,170 40,130 40,50" fill="none"
+                                        stroke="var(--accent-secondary)" stroke-width="1" opacity="0.4"
+                                        stroke-dasharray="10,5" class="hex-dash">
+                                        <animateTransform attributeName="transform" type="rotate" from="0 100 100"
+                                            to="360 100 100" dur="20s" repeatCount="indefinite" />
+                                    </polygon>
+                                </svg>
+                            </div>
+
+                            <!-- Corner Brackets -->
+                            <div class="corner-brackets">
+                                <div class="bracket top-left"></div>
+                                <div class="bracket top-right"></div>
+                                <div class="bracket bottom-left"></div>
+                                <div class="bracket bottom-right"></div>
+                            </div>
+
+                            <!-- Status Text -->
+                            <div class="avatar-status">
+                                <span class="status-text">[ IDENTITY: CLASSIFIED ]</span>
+                                <span class="status-indicator"></span>
+                            </div>
+                        </div>
+
+                        <!-- Floating Code Elements -->
+                        <div class="floating-code">
+                            <span class="code-bit" style="--x: 10%; --y: 20%; --delay: 0s;">0x4F7A</span>
+                            <span class="code-bit" style="--x: 85%; --y: 30%; --delay: 1s;">0xB2E9</span>
+                            <span class="code-bit" style="--x: 15%; --y: 75%; --delay: 2s;">0x91C3</span>
+                            <span class="code-bit" style="--x: 80%; --y: 80%; --delay: 1.5s;">0x6A8D</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-content">
+                    <p class="about-text">
+                        I enjoy understanding how technology works behind the scenes and how small weaknesses can create
+                        big problems. My interest lies in cybersecurity, Linux environments, and automating everyday
+                        tasks to make systems more efficient and secure. I like learning by experimenting, breaking
+                        things safely, and improving them step by step.
+                    </p>
+                    <div class="about-stats">
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+                                    <path d="M6 12v5c3 3 9 3 12 0v-5" />
+                                </svg>
+                            </div>
+                            <span class="stat-label">Cybersecurity Student</span>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                                </svg>
+                            </div>
+                            <span class="stat-label">Security Enthusiast</span>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+                                    <line x1="8" y1="21" x2="16" y2="21" />
+                                    <line x1="12" y1="17" x2="12" y2="21" />
+                                </svg>
+                            </div>
+                            <span class="stat-label">Continuous Learner</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section - Network Node Graph -->
+    <section class="projects" id="projects">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Security Network Map</span>
+                <h2 class="section-title">Project <span class="gradient-text">Topology</span></h2>
+                <p class="section-subtitle">Click nodes to explore connections • Watch data flow</p>
+            </div>
+
+            <!-- Network Graph Container -->
+            <div class="network-container">
+                <svg class="network-svg" id="networkSvg">
+                    <!-- Connections will be drawn here by JavaScript -->
+                </svg>
+
+                <!-- Network Nodes -->
+                <div class="network-nodes" id="networkNodes">
+                    <!-- Central Hub Node -->
+                    <div class="network-node hub-node" data-node="hub" style="--x: 50%; --y: 50%;">
+                        <div class="node-pulse"></div>
+                        <div class="node-core">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <circle cx="12" cy="12" r="6" />
+                                <circle cx="12" cy="12" r="2" />
+                            </svg>
+                        </div>
+                        <div class="node-label">SECURITY HUB</div>
+                    </div>
+
+                    <!-- Project Node 1: Ransomware Resilience -->
+                    <div class="network-node project-node" data-node="project1" data-threat="critical"
+                        style="--x: 20%; --y: 25%;">
+                        <div class="node-pulse"></div>
+                        <div class="node-core">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                            </svg>
+                        </div>
+                        <div class="node-label">Ransomware<br>Resilience</div>
+                        <div class="threat-indicator critical">CRITICAL</div>
+                    </div>
+
+                    <!-- Project Node 2: Security Automation -->
+                    <div class="network-node project-node" data-node="project2" data-threat="high"
+                        style="--x: 80%; --y: 30%;">
+                        <div class="node-pulse"></div>
+                        <div class="node-core">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path
+                                    d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+                            </svg>
+                        </div>
+                        <div class="node-label">Security<br>Automation</div>
+                        <div class="threat-indicator high">HIGH</div>
+                    </div>
+
+                    <!-- Project Node 3: Automation Workflows -->
+                    <div class="network-node project-node" data-node="project3" data-threat="medium"
+                        style="--x: 50%; --y: 80%;">
+                        <div class="node-pulse"></div>
+                        <div class="node-core">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path
+                                    d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                            </svg>
+                        </div>
+                        <div class="node-label">Automation<br>Workflows</div>
+                        <div class="threat-indicator medium">MEDIUM</div>
+                    </div>
+
+                    <!-- Technology Nodes -->
+                    <div class="network-node tech-node" data-node="tech1" style="--x: 10%; --y: 60%;">
+                        <div class="node-core small">
+                            <span class="tech-icon">PS</span>
+                        </div>
+                        <div class="node-label small">PowerShell</div>
+                    </div>
+
+                    <div class="network-node tech-node" data-node="tech2" style="--x: 85%; --y: 65%;">
+                        <div class="node-core small">
+                            <span class="tech-icon">PY</span>
+                        </div>1
+                        <div class="node-label small">Python</div>
+                    </div>
+
+                    <div class="network-node tech-node" data-node="tech3" style="--x: 30%; --y: 10%;">
+                        <div class="node-core small">
+                            <span class="tech-icon">IR</span>
+                        </div>
+                        <div class="node-label small">Incident Response</div>
+                    </div>
+                </div>
+
+                <!-- Project Details Panel -->
+                <div class="project-details-panel" id="projectDetailsPanel">
+                    <div class="panel-header">
+                        <div class="panel-title">PROJECT DETAILS</div>
+                        <button class="panel-close" id="panelClose">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18" />
+                                <line x1="6" y1="6" x2="18" y2="18" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="panel-content" id="panelContent">
+                        <!-- Content injected by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section - Security OS Interface -->
+    <section class="skills" id="skills">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Technical Expertise</span>
+                <h2 class="section-title">Skills & <span class="gradient-text">Technologies</span></h2>
+                <p class="section-subtitle">Core competencies and technical proficiencies</p>
+            </div>
+
+            <!-- Security OS Console -->
+            <div class="security-console" id="securityConsole">
+                <!-- Console Header -->
+                <div class="console-header">
+                    <div class="console-title">
+                        <span class="title-text">Technical Skills</span>
+                    </div>
+                </div>
+
+                <!-- Security Modules Grid -->
+                <div class="modules-grid" id="modulesGrid">
+                    <!-- Module 1: Network Security -->
+                    <div class="security-module" data-module="network-security">
+                        <div class="module-header">
+                            <span class="module-name">Network Security</span>
+                        </div>
+                        <div class="module-body">
+                            <div class="module-status">
+                                <span class="status-label">Status:</span>
+                                <span class="status-indicator active"></span>
+                                <span class="status-value">Active</span>
+                            </div>
+                            <div class="module-tools">
+                                <span class="tools-label">Tools:</span>
+                                <span class="tools-value">Nmap • Wireshark • TCPDump</span>
+                            </div>
+                            <div class="module-footer">
+                                <span class="footer-label">Last Updated:</span>
+                                <span class="footer-value">2026.01</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Module 2: SOC Operations -->
+                    <div class="security-module" data-module="soc-ops">
+                        <div class="module-header">
+                            <span class="module-name">SOC Operations</span>
+                        </div>
+                        <div class="module-body">
+                            <div class="module-status">
+                                <span class="status-label">Status:</span>
+                                <span class="status-indicator active"></span>
+                                <span class="status-value">Active</span>
+                            </div>
+                            <div class="module-tools">
+                                <span class="tools-label">Tools:</span>
+                                <span class="tools-value">SIEM • Splunk • ELK</span>
+                            </div>
+                            <div class="module-footer">
+                                <span class="footer-label">Last Updated:</span>
+                                <span class="footer-value">2026.01</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Module 3: Linux Systems -->
+                    <div class="security-module" data-module="linux">
+                        <div class="module-header">
+                            <span class="module-name">Linux Systems</span>
+                        </div>
+                        <div class="module-body">
+                            <div class="module-status">
+                                <span class="status-label">Status:</span>
+                                <span class="status-indicator active"></span>
+                                <span class="status-value">Active</span>
+                            </div>
+                            <div class="module-tools">
+                                <span class="tools-label">Tools:</span>
+                                <span class="tools-value">Arch • Ubuntu • Bash</span>
+                            </div>
+                            <div class="module-footer">
+                                <span class="footer-label">Last Updated:</span>
+                                <span class="footer-value">2026.01</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Module 4: Automation -->
+                    <div class="security-module" data-module="automation">
+                        <div class="module-header">
+                            <span class="module-name">Automation & Scripting</span>
+                        </div>
+                        <div class="module-body">
+                            <div class="module-status">
+                                <span class="status-label">Status:</span>
+                                <span class="status-indicator active"></span>
+                                <span class="status-value">Active</span>
+                            </div>
+                            <div class="module-tools">
+                                <span class="tools-label">Tools:</span>
+                                <span class="tools-value">Python • PowerShell • APIs</span>
+                            </div>
+                            <div class="module-footer">
+                                <span class="footer-label">Last Updated:</span>
+                                <span class="footer-value">2026.01</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Module 5: Penetration Testing -->
+                    <div class="security-module" data-module="pentest">
+                        <div class="module-header">
+                            <span class="module-name">Penetration Testing</span>
+                        </div>
+                        <div class="module-body">
+                            <div class="module-status">
+                                <span class="status-label">Status:</span>
+                                <span class="status-indicator active"></span>
+                                <span class="status-value">Active</span>
+                            </div>
+                            <div class="module-tools">
+                                <span class="tools-label">Tools:</span>
+                                <span class="tools-value">Metasploit • BurpSuite • Kali</span>
+                            </div>
+                            <div class="module-footer">
+                                <span class="footer-label">Last Updated:</span>
+                                <span class="footer-value">2026.01</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Module 6: Incident Response -->
+                    <div class="security-module" data-module="incident-response">
+                        <div class="module-header">
+                            <span class="module-name">Incident Response</span>
+                        </div>
+                        <div class="module-body">
+                            <div class="module-status">
+                                <span class="status-label">Status:</span>
+                                <span class="status-indicator active"></span>
+                                <span class="status-value">Active</span>
+                            </div>
+                            <div class="module-tools">
+                                <span class="tools-label">Tools:</span>
+                                <span class="tools-value">Forensics • Containment • Analysis</span>
+                            </div>
+                            <div class="module-footer">
+                                <span class="footer-label">Last Updated:</span>
+                                <span class="footer-value">2026.01</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Duplicate modules for infinite loop -->
+                    <!-- Module 1: Network Security (Duplicate) -->
+                    <div class="security-module" data-module="network-security">
+                        <div class="module-header">
+                            <span class="module-name">Network Security</span>
+                        </div>
+                        <div class="module-body">
+                            <div class="module-status">
+                                <span class="status-label">Status:</span>
+                                <span class="status-indicator active"></span>
+                                <span class="status-value">Active</span>
+                            </div>
+                            <div class="module-tools">
+                                <span class="tools-label">Tools:</span>
+                                <span class="tools-value">Nmap • Wireshark • TCPDump</span>
+                            </div>
+                            <div class="module-footer">
+                                <span class="footer-label">Last Updated:</span>
+                                <span class="footer-value">2026.01</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Module 2: SOC Operations (Duplicate) -->
+                    <div class="security-module" data-module="soc-ops">
+                        <div class="module-header">
+                            <span class="module-name">SOC Operations</span>
+                        </div>
+                        <div class="module-body">
+                            <div class="module-status">
+                                <span class="status-label">Status:</span>
+                                <span class="status-indicator active"></span>
+                                <span class="status-value">Active</span>
+                            </div>
+                            <div class="module-tools">
+                                <span class="tools-label">Tools:</span>
+                                <span class="tools-value">SIEM • Splunk • ELK</span>
+                            </div>
+                            <div class="module-footer">
+                                <span class="footer-label">Last Updated:</span>
+                                <span class="footer-value">2026.01</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Module 3: Linux Systems (Duplicate) -->
+                    <div class="security-module" data-module="linux">
+                        <div class="module-header">
+                            <span class="module-name">Linux Systems</span>
+                        </div>
+                        <div class="module-body">
+                            <div class="module-status">
+                                <span class="status-label">Status:</span>
+                                <span class="status-indicator active"></span>
+                                <span class="status-value">Active</span>
+                            </div>
+                            <div class="module-tools">
+                                <span class="tools-label">Tools:</span>
+                                <span class="tools-value">Arch • Ubuntu • Bash</span>
+                            </div>
+                            <div class="module-footer">
+                                <span class="footer-label">Last Updated:</span>
+                                <span class="footer-value">2026.01</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Module 4: Automation (Duplicate) -->
+                    <div class="security-module" data-module="automation">
+                        <div class="module-header">
+                            <span class="module-name">Automation & Scripting</span>
+                        </div>
+                        <div class="module-body">
+                            <div class="module-status">
+                                <span class="status-label">Status:</span>
+                                <span class="status-indicator active"></span>
+                                <span class="status-value">Active</span>
+                            </div>
+                            <div class="module-tools">
+                                <span class="tools-label">Tools:</span>
+                                <span class="tools-value">Python • PowerShell • APIs</span>
+                            </div>
+                            <div class="module-footer">
+                                <span class="footer-label">Last Updated:</span>
+                                <span class="footer-value">2026.01</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Module 5: Penetration Testing (Duplicate) -->
+                    <div class="security-module" data-module="pentest">
+                        <div class="module-header">
+                            <span class="module-name">Penetration Testing</span>
+                        </div>
+                        <div class="module-body">
+                            <div class="module-status">
+                                <span class="status-label">Status:</span>
+                                <span class="status-indicator active"></span>
+                                <span class="status-value">Active</span>
+                            </div>
+                            <div class="module-tools">
+                                <span class="tools-label">Tools:</span>
+                                <span class="tools-value">Metasploit • BurpSuite • Kali</span>
+                            </div>
+                            <div class="module-footer">
+                                <span class="footer-label">Last Updated:</span>
+                                <span class="footer-value">2026.01</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Module 6: Incident Response (Duplicate) -->
+                    <div class="security-module" data-module="incident-response">
+                        <div class="module-header">
+                            <span class="module-name">Incident Response</span>
+                        </div>
+                        <div class="module-body">
+                            <div class="module-status">
+                                <span class="status-label">Status:</span>
+                                <span class="status-indicator active"></span>
+                                <span class="status-value">Active</span>
+                            </div>
+                            <div class="module-tools">
+                                <span class="tools-label">Tools:</span>
+                                <span class="tools-value">Forensics • Containment • Analysis</span>
+                            </div>
+                            <div class="module-footer">
+                                <span class="footer-label">Last Updated:</span>
+                                <span class="footer-value">2026.01</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scroll Indicators -->
+                <div class="scroll-indicators" id="scrollIndicators">
+                    <span class="scroll-dot active" data-index="0"></span>
+                    <span class="scroll-dot" data-index="1"></span>
+                    <span class="scroll-dot" data-index="2"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="section-header center">
+                <span class="section-tag">Get in Touch</span>
+                <h2 class="section-title">Let's Work <span class="gradient-text">Together</span></h2>
+                <p class="section-subtitle">
+                    Have a project in mind? Let's create something amazing together.
+                </p>
+            </div>
+            <div class="contact-content">
+                <form class="contact-form" id="contactForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Your Name</label>
+                            <input type="text" id="name" name="name" placeholder="John Doe" required minlength="2"
+                                maxlength="50" pattern="[A-Za-z\s]+" title="Only letters and spaces allowed">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Your Email</label>
+                            <input type="email" id="email" name="email" placeholder="john@example.com" required
+                                maxlength="100" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                                title="Valid email required">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" name="subject" placeholder="Project Inquiry" maxlength="100"
+                            pattern="[A-Za-z0-9\s\-_]+"
+                            title="Only letters, numbers, spaces, hyphens and underscores allowed">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="5" placeholder="Tell me about your project..."
+                            required minlength="10" maxlength="1000"></textarea>
+                    </div>
+
+                    <!-- Security fields -->
+                    <input type="hidden" name="_subject" value="New Portfolio Contact">
+                    <input type="hidden" name="_captcha" value="false">
+                    <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+
+                    <button type="submit" class="btn btn-primary btn-full magnetic">
+                        <span>Send Message</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2026 Abishek Pechiappan. All rights reserved.</p>
+                <p>Designed & Built with _________</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts - Load in order -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script src="script.js" defer></script>
+</body>
+
+</html>

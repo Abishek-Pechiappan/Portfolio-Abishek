@@ -7,19 +7,24 @@ if (typeof gsap === 'undefined') {
     console.error('GSAP not loaded! Animations may not work.');
 }
 
-// Loading Screen
+// Security Boot Sequence Loading Screen
 window.addEventListener('load', () => {
     const loadingScreen = document.getElementById('loadingScreen');
     const loadingBarFill = document.getElementById('loadingBarFill');
+    const loadingPercent = document.getElementById('loadingPercent');
     
-    // Simulate loading progress
+    // Simulate loading progress with boot sequence
     let progress = 0;
     const interval = setInterval(() => {
-        progress += Math.random() * 30;
+        progress += Math.random() * 15 + 5; // Slightly faster progress
         if (progress > 100) progress = 100;
         
         if (loadingBarFill) {
             loadingBarFill.style.width = progress + '%';
+        }
+        
+        if (loadingPercent) {
+            loadingPercent.textContent = Math.floor(progress) + '%';
         }
         
         if (progress >= 100) {
@@ -27,21 +32,47 @@ window.addEventListener('load', () => {
             setTimeout(() => {
                 loadingScreen.classList.add('loaded');
                 document.body.classList.add('loaded');
-            }, 300);
+            }, 500);
         }
     }, 150);
 });
 
-// Scroll Progress Indicator
+// Scroll Progress Indicator with Terminal Percentage
+let lastMilestone = 0;
+const milestones = [25, 50, 75, 100];
+
 window.addEventListener('scroll', () => {
-    const scrollProgress = document.getElementById('scrollProgress');
-    if (!scrollProgress) return;
+    const scrollPercentage = document.getElementById('scrollPercentage');
+    const percentValue = document.getElementById('percentValue');
+    
+    if (!scrollPercentage || !percentValue) return;
     
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
     const scrollPercent = (scrollTop / docHeight) * 100;
     
-    scrollProgress.style.width = scrollPercent + '%';
+    // Update percentage text
+    percentValue.textContent = Math.round(scrollPercent);
+    
+    // Trigger glitch effect at milestones
+    const currentMilestone = milestones.find(m => 
+        scrollPercent >= m && lastMilestone < m
+    );
+    
+    if (currentMilestone) {
+        scrollPercentage.classList.add('milestone-glitch');
+        lastMilestone = currentMilestone;
+        
+        // Remove glitch class after animation
+        setTimeout(() => {
+            scrollPercentage.classList.remove('milestone-glitch');
+        }, 500);
+    }
+    
+    // Reset milestone tracker when scrolling back up
+    if (scrollPercent < 25) {
+        lastMilestone = 0;
+    }
 });
 
 // Smooth Scroll Reveal Animations
@@ -83,8 +114,10 @@ document.addEventListener('DOMContentLoaded', () => {
     initNameTyping();
     initDecryptedText();
     initFormHandling();
-    initCardSwap();
+    initModulesCarousel();
     initProfileTilt();
+    initCircuitCanvas();
+    initNetworkGraph();
 });
 
 // ========================================
@@ -463,11 +496,19 @@ function initDecryptedText() {
 // ========================================
 // Typing Effect
 // ========================================
+// Security Roles Typing Effect
+// ========================================
 function initTypingEffect() {
-    const typingElement = document.querySelector('.typing-text');
+    const typingElement = document.getElementById('typingRoles');
     if (!typingElement) return;
 
-    const roles = ['Creative Developer', 'UI/UX Designer', 'Problem Solver', 'Tech Enthusiast'];
+    const roles = [
+        'Security Researcher',
+        'Threat Analyst',
+        'Penetration Tester',
+        'Cyber Defense Specialist',
+        'Security Enthusiast'
+    ];
     let roleIndex = 0;
     let charIndex = 0;
     let isDeleting = false;
@@ -488,7 +529,7 @@ function initTypingEffect() {
 
         if (!isDeleting && charIndex === currentRole.length) {
             isDeleting = true;
-            typingSpeed = 2000; // Pause at end
+            typingSpeed = 2500; // Pause at end
         } else if (isDeleting && charIndex === 0) {
             isDeleting = false;
             roleIndex = (roleIndex + 1) % roles.length;
@@ -503,42 +544,133 @@ function initTypingEffect() {
 }
 
 // ========================================
-// Form Handling
+// Form Handling - Formspree with Security
 // ========================================
 function initFormHandling() {
     const form = document.getElementById('contactForm');
     if (!form) return;
 
-    // Initialize EmailJS with your public key
-    // Sign up at https://www.emailjs.com/ to get your keys
-    emailjs.init('YOUR_PUBLIC_KEY'); // Replace with your EmailJS public key
+    // Sanitize input to prevent XSS
+    function sanitizeInput(input) {
+        const div = document.createElement('div');
+        div.textContent = input;
+        return div.innerHTML
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#x27;')
+            .replace(/\//g, '&#x2F;');
+    }
 
-    form.addEventListener('submit', (e) => {
+    // Validate inputs before submission
+    function validateForm() {
+        const name = form.querySelector('#name').value.trim();
+        const email = form.querySelector('#email').value.trim();
+        const message = form.querySelector('#message').value.trim();
+        const honeypot = form.querySelector('[name="_honey"]').value;
+
+        // Honeypot check (bot detection)
+        if (honeypot) {
+            console.warn('Bot detected');
+            return false;
+        }
+
+        // Name validation (2-50 chars, letters and spaces only)
+        if (!/^[A-Za-z\s]{2,50}$/.test(name)) {
+            alert('Name must be 2-50 characters and contain only letters and spaces');
+            return false;
+        }
+
+        // Email validation
+        if (!/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i.test(email)) {
+            alert('Please enter a valid email address');
+            return false;
+        }
+
+        // Message validation (10-1000 chars)
+        if (message.length < 10 || message.length > 1000) {
+            alert('Message must be between 10 and 1000 characters');
+            return false;
+        }
+
+        // Check for suspicious patterns (SQL injection attempts, script tags, etc.)
+        const suspiciousPatterns = [
+            /<script/i,
+            /javascript:/i,
+            /on\w+\s*=/i,
+            /SELECT.*FROM/i,
+            /INSERT.*INTO/i,
+            /DELETE.*FROM/i,
+            /DROP.*TABLE/i,
+            /UNION.*SELECT/i,
+            /<iframe/i,
+            /<embed/i,
+            /<object/i
+        ];
+
+        const allInputs = name + email + message + (form.querySelector('#subject')?.value || '');
+        for (const pattern of suspiciousPatterns) {
+            if (pattern.test(allInputs)) {
+                alert('Your message contains invalid content. Please remove any HTML or special characters.');
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
+
+        // Validate form
+        if (!validateForm()) {
+            return;
+        }
 
         const submitBtn = form.querySelector('button[type="submit"]');
         const originalText = submitBtn.innerHTML;
+
+        // Sanitize all inputs
+        const sanitizedData = new FormData();
+        const formData = new FormData(form);
+        
+        for (const [key, value] of formData.entries()) {
+            if (key !== '_honey') { // Don't sanitize honeypot
+                sanitizedData.append(key, sanitizeInput(value.toString()));
+            } else {
+                sanitizedData.append(key, value);
+            }
+        }
 
         // Show loading state
         submitBtn.innerHTML = `
             <span>Sending...</span>
             <svg class="spin" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                <circle cx="12" cy="12" r="10"/>
             </svg>
         `;
         submitBtn.disabled = true;
 
-        // Add spin animation
-        const style = document.createElement('style');
-        style.textContent = `
-            .spin { animation: spin 1s linear infinite; }
-            @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        `;
-        document.head.appendChild(style);
+        // Rate limiting check (prevent spam)
+        const lastSubmit = localStorage.getItem('lastFormSubmit');
+        const now = Date.now();
+        if (lastSubmit && (now - parseInt(lastSubmit)) < 60000) { // 1 minute cooldown
+            alert('Please wait a moment before submitting another message.');
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+            return;
+        }
 
-        // Send email using EmailJS
-        emailjs.sendForm('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', form)
-            .then(() => {
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: sanitizedData,
+                headers: { 
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (response.ok) {
                 submitBtn.innerHTML = `
                     <span>Message Sent!</span>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -546,35 +678,42 @@ function initFormHandling() {
                     </svg>
                 `;
                 submitBtn.style.background = 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)';
-
-                // Reset form
                 form.reset();
+                
+                // Set last submit time
+                localStorage.setItem('lastFormSubmit', now.toString());
+            } else {
+                throw new Error('Failed to send');
+            }
+        } catch (error) {
+            console.error('Form submission error:', error);
+            submitBtn.innerHTML = `
+                <span>Failed to Send</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            `;
+            submitBtn.style.background = 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)';
+        }
 
-                // Reset button after delay
-                setTimeout(() => {
-                    submitBtn.innerHTML = originalText;
-                    submitBtn.style.background = '';
-                    submitBtn.disabled = false;
-                }, 3000);
-            })
-            .catch((error) => {
-                console.error('Email send failed:', error);
-                submitBtn.innerHTML = `
-                    <span>Failed to Send</span>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
-                `;
-                submitBtn.style.background = 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)';
-
-                // Reset button after delay
-                setTimeout(() => {
-                    submitBtn.innerHTML = originalText;
-                    submitBtn.style.background = '';
-                    submitBtn.disabled = false;
-                }, 3000);
-            });
+        // Reset button after delay
+        setTimeout(() => {
+            submitBtn.innerHTML = originalText;
+            submitBtn.style.background = '';
+            submitBtn.disabled = false;
+        }, 3000);
     });
+
+    // Add CSS for loading animation
+    const style = document.createElement('style');
+    style.textContent = `
+        .spin { animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    `;
+    if (!document.querySelector('style[data-form-styles]')) {
+        style.setAttribute('data-form-styles', '');
+        document.head.appendChild(style);
+    }
 }
 
 // ========================================
@@ -613,191 +752,83 @@ if (!('scrollBehavior' in document.documentElement.style)) {
 // ========================================
 // Card Swap Animation (GSAP)
 // ========================================
-function initCardSwap() {
-    const container = document.getElementById('skillCardSwap');
-    if (!container || typeof gsap === 'undefined') {
-        console.warn('CardSwap: Container not found or GSAP not loaded');
+// ========================================
+// Security Modules Carousel - Infinite Smooth Scroll
+// ========================================
+function initModulesCarousel() {
+    const grid = document.getElementById('modulesGrid');
+    const indicators = document.querySelectorAll('.scroll-dot');
+    
+    if (!grid) {
+        console.warn('Modules carousel element not found');
         return;
     }
-
-    const cards = container.querySelectorAll('.skill-card');
-    if (cards.length < 2) return;
-
-    // Configuration
-    const config = {
-        cardDistance: 60,      // Horizontal offset between cards
-        verticalDistance: 70,  // Vertical offset between cards
-        delay: 5000,           // Time between swaps (ms)
-        skewAmount: 6,         // Skew angle
-        easing: 'elastic',     // 'elastic' or 'smooth'
-    };
-
-    // Animation settings based on easing type
-    const animConfig = config.easing === 'elastic'
-        ? {
-            ease: 'elastic.out(0.6, 0.9)',
-            durDrop: 2,
-            durMove: 2,
-            durReturn: 2,
-            promoteOverlap: 0.9,
-            returnDelay: 0.05
+    
+    const modules = grid.querySelectorAll('.security-module');
+    const totalModules = modules.length / 2; // We have duplicates
+    const moduleWidth = 420; // Module width + gap
+    let scrollSpeed = 1; // Pixels per frame
+    let isScrolling = true;
+    let animationFrame;
+    
+    // Update active indicator based on scroll position
+    function updateIndicators() {
+        const scrollPercentage = (grid.scrollLeft % (moduleWidth * totalModules)) / (moduleWidth * totalModules);
+        const activeIndex = Math.floor(scrollPercentage * 3) % 3;
+        
+        indicators.forEach((dot, index) => {
+            dot.classList.toggle('active', index === activeIndex);
+        });
+    }
+    
+    // Smooth continuous scroll
+    function smoothScroll() {
+        if (!isScrolling) {
+            animationFrame = requestAnimationFrame(smoothScroll);
+            return;
         }
-        : {
-            ease: 'power1.inOut',
-            durDrop: 0.8,
-            durMove: 0.8,
-            durReturn: 0.8,
-            promoteOverlap: 0.45,
-            returnDelay: 0.2
-        };
-
-    // Track card order
-    let order = Array.from({ length: cards.length }, (_, i) => i);
-    let currentTimeline = null;
-    let intervalId = null;
-    let isPaused = false;
-
-    // Calculate slot position for a card at index i
-    function makeSlot(i, total) {
-        return {
-            x: i * config.cardDistance,
-            y: -i * config.verticalDistance,
-            z: -i * config.cardDistance * 1.5,
-            zIndex: total - i
-        };
+        
+        grid.scrollLeft += scrollSpeed;
+        
+        // Reset to start when reaching halfway (where duplicates begin)
+        const maxScroll = moduleWidth * totalModules;
+        if (grid.scrollLeft >= maxScroll) {
+            grid.scrollLeft = 0;
+        }
+        
+        updateIndicators();
+        animationFrame = requestAnimationFrame(smoothScroll);
     }
-
-    // Place card immediately at slot position
-    function placeCard(card, slot) {
-        gsap.set(card, {
-            x: slot.x,
-            y: slot.y,
-            z: slot.z,
-            xPercent: -50,
-            yPercent: -50,
-            skewY: config.skewAmount,
-            transformOrigin: 'center center',
-            zIndex: slot.zIndex,
-            force3D: true
-        });
-    }
-
-    // Initialize all cards at their starting positions
-    cards.forEach((card, i) => {
-        placeCard(card, makeSlot(i, cards.length));
-    });
-
-    // Swap animation - move front card to back
-    function swap() {
-        if (order.length < 2 || isPaused) return;
-
-        const [frontIndex, ...rest] = order;
-        const frontCard = cards[frontIndex];
-        const total = cards.length;
-
-        const tl = gsap.timeline();
-        currentTimeline = tl;
-
-        // Drop the front card down
-        tl.to(frontCard, {
-            y: '+=500',
-            duration: animConfig.durDrop,
-            ease: animConfig.ease
-        });
-
-        // Promote remaining cards forward
-        tl.addLabel('promote', `-=${animConfig.durDrop * animConfig.promoteOverlap}`);
-        rest.forEach((cardIndex, i) => {
-            const card = cards[cardIndex];
-            const slot = makeSlot(i, total);
-            tl.set(card, { zIndex: slot.zIndex }, 'promote');
-            tl.to(card, {
-                x: slot.x,
-                y: slot.y,
-                z: slot.z,
-                duration: animConfig.durMove,
-                ease: animConfig.ease
-            }, `promote+=${i * 0.15}`);
-        });
-
-        // Return front card to back position
-        const backSlot = makeSlot(total - 1, total);
-        tl.addLabel('return', `promote+=${animConfig.durMove * animConfig.returnDelay}`);
-        tl.call(() => {
-            gsap.set(frontCard, { zIndex: backSlot.zIndex });
-        }, undefined, 'return');
-        tl.to(frontCard, {
-            x: backSlot.x,
-            y: backSlot.y,
-            z: backSlot.z,
-            duration: animConfig.durReturn,
-            ease: animConfig.ease
-        }, 'return');
-
-        // Update order array
-        tl.call(() => {
-            order = [...rest, frontIndex];
-        });
-    }
-
-    // Start the swap cycle
-    function startSwapping() {
-        swap();
-        intervalId = setInterval(swap, config.delay);
-    }
-
+    
+    // Start smooth scrolling
+    smoothScroll();
+    
     // Pause on hover
-    function pause() {
-        isPaused = true;
-        if (currentTimeline) currentTimeline.pause();
-        clearInterval(intervalId);
-    }
-
+    grid.addEventListener('mouseenter', () => {
+        isScrolling = false;
+    });
+    
     // Resume on mouse leave
-    function resume() {
-        isPaused = false;
-        if (currentTimeline) currentTimeline.play();
-        intervalId = setInterval(swap, config.delay);
-    }
-
-    // Setup event listeners
-    container.addEventListener('mouseenter', pause);
-    container.addEventListener('mouseleave', resume);
-
-    // Click to manually swap
-    cards.forEach((card, i) => {
-        card.addEventListener('click', () => {
-            if (order[0] === i) {
-                // If clicking the front card, trigger swap
-                clearInterval(intervalId);
-                swap();
-                intervalId = setInterval(swap, config.delay);
-            }
+    grid.addEventListener('mouseleave', () => {
+        isScrolling = true;
+    });
+    
+    // Click indicators to jump to section
+    indicators.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            const targetScroll = moduleWidth * 2 * index; // Each section has ~2 modules
+            grid.scrollTo({
+                left: targetScroll,
+                behavior: 'smooth'
+            });
+            
+            // Pause briefly after manual navigation
+            isScrolling = false;
+            setTimeout(() => {
+                isScrolling = true;
+            }, 2000);
         });
     });
-
-    // Mouse wheel to swap
-    let wheelTimeout = null;
-    let isWheelActive = false;
-
-    container.addEventListener('wheel', (e) => {
-        e.preventDefault();
-        
-        if (isWheelActive) return;
-        
-        isWheelActive = true;
-        clearInterval(intervalId);
-        swap();
-        
-        clearTimeout(wheelTimeout);
-        wheelTimeout = setTimeout(() => {
-            isWheelActive = false;
-            intervalId = setInterval(swap, config.delay);
-        }, 1000);
-    }, { passive: false });
-
-    // Start animation
-    startSwapping();
 }
 
 // ========================================
@@ -964,4 +995,373 @@ function initProfileTilt() {
     toCenter();
     initialUntil = performance.now() + ANIMATION_CONFIG.INITIAL_DURATION;
     start();
+}
+
+// ========================================
+// Circuit Board Canvas Animation
+// ========================================
+function initCircuitCanvas() {
+    const canvas = document.getElementById('circuitCanvas');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    
+    // Circuit nodes
+    const nodes = [];
+    const nodeCount = 30;
+    
+    // Create circuit nodes
+    for (let i = 0; i < nodeCount; i++) {
+        nodes.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            vx: (Math.random() - 0.5) * 0.2,
+            vy: (Math.random() - 0.5) * 0.2,
+            radius: Math.random() * 2 + 1
+        });
+    }
+    
+    function drawCircuit() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw connections
+        ctx.strokeStyle = 'rgba(99, 102, 241, 0.15)';
+        ctx.lineWidth = 1;
+        
+        for (let i = 0; i < nodes.length; i++) {
+            for (let j = i + 1; j < nodes.length; j++) {
+                const dx = nodes[i].x - nodes[j].x;
+                const dy = nodes[i].y - nodes[j].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < 150) {
+                    ctx.beginPath();
+                    ctx.moveTo(nodes[i].x, nodes[i].y);
+                    ctx.lineTo(nodes[j].x, nodes[j].y);
+                    ctx.globalAlpha = 1 - (distance / 150);
+                    ctx.stroke();
+                }
+            }
+        }
+        
+        // Draw nodes
+        ctx.globalAlpha = 1;
+        nodes.forEach(node => {
+            ctx.fillStyle = 'rgba(99, 102, 241, 0.6)';
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Add glow
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = 'rgba(99, 102, 241, 0.8)';
+            ctx.fill();
+            ctx.shadowBlur = 0;
+            
+            // Update position
+            node.x += node.vx;
+            node.y += node.vy;
+            
+            // Bounce off edges
+            if (node.x < 0 || node.x > canvas.width) node.vx *= -1;
+            if (node.y < 0 || node.y > canvas.height) node.vy *= -1;
+        });
+        
+        requestAnimationFrame(drawCircuit);
+    }
+    
+    drawCircuit();
+    
+    // Resize handler
+    window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    });
+}
+
+// ========================================
+// Network Graph - Interactive Project Display
+// ========================================
+function initNetworkGraph() {
+    const networkSvg = document.getElementById('networkSvg');
+    const networkNodes = document.getElementById('networkNodes');
+    const detailsPanel = document.getElementById('projectDetailsPanel');
+    const panelContent = document.getElementById('panelContent');
+    const panelClose = document.getElementById('panelClose');
+    
+    if (!networkSvg || !networkNodes) return;
+    
+    // Project data
+    const projectData = {
+        project1: {
+            title: 'Ransomware Resilience Simulator',
+            category: 'Cybersecurity',
+            status: 'Active',
+            threat: 'CRITICAL',
+            description: 'Comprehensive study of ransomware attack lifecycle with focus on simulated attack and recovery scenarios. Developed resilience strategies emphasizing prevention, detection, and response mechanisms.',
+            details: [
+                'Analyzed ransomware propagation patterns',
+                'Designed multi-layer defense strategies',
+                'Created incident response playbooks',
+                'Implemented recovery protocols'
+            ],
+            technologies: ['Python', 'Incident Response', 'Forensics'],
+            connections: ['hub', 'tech3']
+        },
+        project2: {
+            title: 'Security Tool Automation',
+            category: 'Security Automation',
+            status: 'Completed',
+            threat: 'HIGH',
+            description: 'Developed automated security scanning and monitoring solutions using PowerShell scripting. Streamlined repetitive security checks to improve efficiency and consistency.',
+            details: [
+                'Automated vulnerability scanning',
+                'Created security audit scripts',
+                'Implemented scheduled monitoring',
+                'Built reporting dashboards'
+            ],
+            technologies: ['PowerShell', 'Automation', 'Security Scanning'],
+            connections: ['hub', 'tech1']
+        },
+        project3: {
+            title: 'Personal Automation Workflows',
+            category: 'Productivity',
+            status: 'In Progress',
+            threat: 'MEDIUM',
+            description: 'Built comprehensive automation workflows for routine tasks using modern automation tools. Focused on reducing manual effort and improving productivity through intelligent task orchestration.',
+            details: [
+                'Designed workflow architectures',
+                'Automated repetitive processes',
+                'Integrated multiple tools',
+                'Optimized task sequences'
+            ],
+            technologies: ['Python', 'Automation', 'Workflows'],
+            connections: ['hub', 'tech1', 'tech2']
+        }
+    };
+    
+    // Get node positions
+    function getNodePosition(nodeElement) {
+        const rect = nodeElement.getBoundingClientRect();
+        const containerRect = networkNodes.getBoundingClientRect();
+        return {
+            x: rect.left - containerRect.left + rect.width / 2,
+            y: rect.top - containerRect.top + rect.height / 2
+        };
+    }
+    
+    // Draw connection lines
+    function drawConnections() {
+        const svgNS = 'http://www.w3.org/2000/svg';
+        networkSvg.innerHTML = '';
+        
+        const connections = [
+            { from: 'hub', to: 'project1' },
+            { from: 'hub', to: 'project2' },
+            { from: 'hub', to: 'project3' },
+            { from: 'project1', to: 'tech3' },
+            { from: 'project2', to: 'tech1' },
+            { from: 'project3', to: 'tech1' },
+            { from: 'project3', to: 'tech2' },
+            { from: 'tech1', to: 'hub' }
+        ];
+        
+        connections.forEach(conn => {
+            const fromNode = document.querySelector(`[data-node="${conn.from}"]`);
+            const toNode = document.querySelector(`[data-node="${conn.to}"]`);
+            
+            if (fromNode && toNode) {
+                const fromPos = getNodePosition(fromNode);
+                const toPos = getNodePosition(toNode);
+                
+                const line = document.createElementNS(svgNS, 'line');
+                line.setAttribute('x1', fromPos.x);
+                line.setAttribute('y1', fromPos.y);
+                line.setAttribute('x2', toPos.x);
+                line.setAttribute('y2', toPos.y);
+                line.classList.add('connection-line');
+                line.dataset.from = conn.from;
+                line.dataset.to = conn.to;
+                
+                networkSvg.appendChild(line);
+            }
+        });
+    }
+    
+    // Animate data packet
+    function animateDataPacket(fromNode, toNode) {
+        const fromPos = getNodePosition(fromNode);
+        const toPos = getNodePosition(toNode);
+        
+        const packet = document.createElement('div');
+        packet.classList.add('data-packet');
+        packet.style.left = fromPos.x + 'px';
+        packet.style.top = fromPos.y + 'px';
+        networkNodes.appendChild(packet);
+        
+        const distance = Math.sqrt(
+            Math.pow(toPos.x - fromPos.x, 2) + 
+            Math.pow(toPos.y - fromPos.y, 2)
+        );
+        const duration = distance * 2; // Speed factor
+        
+        packet.animate([
+            { left: fromPos.x + 'px', top: fromPos.y + 'px', opacity: 1 },
+            { left: toPos.x + 'px', top: toPos.y + 'px', opacity: 1 }
+        ], {
+            duration: duration,
+            easing: 'linear'
+        }).onfinish = () => {
+            packet.remove();
+        };
+    }
+    
+    // Continuous data flow animation
+    function startDataFlow() {
+        const connections = [
+            { from: 'hub', to: 'project1' },
+            { from: 'hub', to: 'project2' },
+            { from: 'hub', to: 'project3' },
+            { from: 'project2', to: 'tech1' },
+            { from: 'project3', to: 'tech2' }
+        ];
+        
+        function sendRandomPacket() {
+            const conn = connections[Math.floor(Math.random() * connections.length)];
+            const fromNode = document.querySelector(`[data-node="${conn.from}"]`);
+            const toNode = document.querySelector(`[data-node="${conn.to}"]`);
+            
+            if (fromNode && toNode) {
+                animateDataPacket(fromNode, toNode);
+            }
+            
+            setTimeout(sendRandomPacket, Math.random() * 2000 + 1000);
+        }
+        
+        sendRandomPacket();
+    }
+    
+    // Show project details
+    function showProjectDetails(projectId) {
+        const project = projectData[projectId];
+        if (!project) return;
+        
+        const threatClass = project.threat.toLowerCase();
+        
+        panelContent.innerHTML = `
+            <div class="panel-section">
+                <h3 style="color: var(--accent-primary); font-size: 1.1rem; margin-bottom: 15px;">
+                    ${project.title}
+                </h3>
+                <div class="panel-meta">
+                    <div class="meta-item">
+                        <span class="meta-label">Category</span>
+                        <span class="meta-value">${project.category}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Status</span>
+                        <span class="meta-value">${project.status}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Threat Level</span>
+                        <span class="meta-value" style="color: ${
+                            threatClass === 'critical' ? '#ff4444' : 
+                            threatClass === 'high' ? '#ffaa00' : '#ffff00'
+                        };">${project.threat}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel-section">
+                <div class="panel-section-title">Overview</div>
+                <p class="panel-description">${project.description}</p>
+            </div>
+            
+            <div class="panel-section">
+                <div class="panel-section-title">Key Achievements</div>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    ${project.details.map(detail => `
+                        <li style="color: var(--text-tertiary); font-size: 0.85rem; margin-bottom: 8px; padding-left: 15px; position: relative;">
+                            <span style="position: absolute; left: 0; color: var(--accent-primary);">▹</span>
+                            ${detail}
+                        </li>
+                    `).join('')}
+                </ul>
+            </div>
+            
+            <div class="panel-section">
+                <div class="panel-section-title">Technologies</div>
+                <div class="panel-tags">
+                    ${project.technologies.map(tech => `
+                        <span class="tag tag-forensics">${tech}</span>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+        
+        detailsPanel.classList.add('active');
+        
+        // Highlight connections
+        const lines = networkSvg.querySelectorAll('.connection-line');
+        lines.forEach(line => line.classList.remove('active'));
+        
+        project.connections.forEach(connId => {
+            const line = networkSvg.querySelector(`[data-from="${projectId}"][data-to="${connId}"], [data-from="${connId}"][data-to="${projectId}"]`);
+            if (line) line.classList.add('active');
+        });
+    }
+    
+    // Hide project details
+    function hideProjectDetails() {
+        detailsPanel.classList.remove('active');
+        const lines = networkSvg.querySelectorAll('.connection-line');
+        lines.forEach(line => line.classList.remove('active'));
+    }
+    
+    // Node click handlers
+    const projectNodes = document.querySelectorAll('.project-node');
+    projectNodes.forEach(node => {
+        node.addEventListener('click', () => {
+            const projectId = node.dataset.node;
+            showProjectDetails(projectId);
+            
+            // Animate data burst from clicked node
+            const connections = projectData[projectId]?.connections || [];
+            connections.forEach(targetId => {
+                const targetNode = document.querySelector(`[data-node="${targetId}"]`);
+                if (targetNode) {
+                    setTimeout(() => {
+                        animateDataPacket(node, targetNode);
+                    }, Math.random() * 300);
+                }
+            });
+        });
+    });
+    
+    // Close panel
+    if (panelClose) {
+        panelClose.addEventListener('click', hideProjectDetails);
+    }
+    
+    // Close panel when clicking outside
+    networkNodes.addEventListener('click', (e) => {
+        if (e.target === networkNodes) {
+            hideProjectDetails();
+        }
+    });
+    
+    // Initialize
+    drawConnections();
+    startDataFlow();
+    
+    // Redraw on window resize
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            drawConnections();
+        }, 250);
+    });
 }
